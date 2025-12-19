@@ -1,0 +1,43 @@
+{
+  "sites": [
+    {"domain":"theguardian.com","type":"sitemap","feed":"https://www.theguardian.com/sitemaps/news.xml","js":false},
+    {"domain":"towardsdatascience.com","type":"category","url":"https://towardsdatascience.com/tagged/artificial-intelligence","js":true},
+    {"domain":"analyticsvidhya.com","type":"sitemap","feed":"https://www.analyticsvidhya.com/sitemap.xml","js":false},
+    {"domain":"kdnuggets.com","type":"sitemap","feed":"https://www.kdnuggets.com/sitemap.xml","js":false},
+    {"domain":"machinelearningmastery.com","type":"sitemap","feed":"https://machinelearningmastery.com/sitemap.xml","js":false},
+    {"domain":"thenextweb.com","type":"sitemap","feed":"https://thenextweb.com/sitemap.xml","js":false},
+    {"domain":"arstechnica.com","type":"sitemap","feed":"https://arstechnica.com/sitemap.xml","js":false},
+    {"domain":"singularityhub.com","type":"sitemap","feed":"https://singularityhub.com/sitemap_index.xml","js":false},
+    {"domain":"hackernoon.com","type":"category","url":"https://hackernoon.com/tagged/artificial-intelligence","js":true},
+    {"domain":"technologyreview.com","type":"sitemap","feed":"https://www.technologyreview.com/sitemap.xml","js":false},
+    {"domain":"deeplearning.ai","type":"category","url":"https://www.deeplearning.ai/the-batch/","js":true},
+    {"domain":"axios.com","type":"sitemap","feed":"https://www.axios.com/sitemap.xml","js":false},
+    {"domain":"aitrends.com","type":"sitemap","feed":"https://www.aitrends.com/sitemap.xml","js":false},
+    {"domain":"emerj.com","type":"sitemap","feed":"https://emerj.com/sitemap_index.xml","js":false},
+    {"domain":"anthropic.com","type":"category","url":"https://www.anthropic.com/news","js":false},
+    {"domain":"deepmind.google","type":"category","url":"https://deepmind.google/discover/blog/","js":true},
+    {"domain":"microsoft.com","type":"category","url":"https://blogs.microsoft.com/ai/","js":false},
+    {"domain":"mit.edu","type":"category","url":"https://news.mit.edu/topic/artificial-intelligence2","js":false},
+    {"domain":"berkeley.edu","type":"category","url":"https://bair.berkeley.edu/blog/","js":false},
+    {"domain":"sciencedaily.com","type":"category","url":"https://www.sciencedaily.com/news/computers_math/artificial_intelligence/","js":false},
+    {"domain":"techcrunch.com","type":"sitemap","feed":"https://techcrunch.com/sitemap.xml","js":false},
+    {"domain":"wired.com","type":"sitemap","feed":"https://www.wired.com/sitemap.xml","js":false}
+  ],
+  "keywords": [
+    "artificial intelligence", "machine learning", "deep learning",
+    "neural network", "nlp", "natural language processing", "computer vision", "automation", "reinforcement learning", "gpt", "llm", "large language model",
+    "generative ai", "gen ai", "stable diffusion", "midjourney", "dall-e",
+    "ethical ai", "ai ethics", "ai safety", "ai policy", "ai bias", "explainable ai",
+    "ai governance", "ai regulation", "ai transparency", "fairness in ai",
+    "responsible ai", "trustworthy ai", "ai accountability", "ai impact",
+    "ai innovation", "ai research", "ai applications", "ai development",
+    "ai technology", "ai trends", "ai future", "ai challenges", "ai opportunities", "attention mechanism", "edge ai", "ai chip",
+    "ai startup", "ai funding", "ai acquisition", "ai ipo", "ai investment"
+  ],
+  "min_content_chars": 500,
+  "max_content_chars": 10000,
+  "max_urls_per_site": 15000,
+  "max_urls": 500000,
+  "concurrent_requests": 200,
+  "sitemap_max_nested": 5
+}

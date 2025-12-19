@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Ethics Radar - Article Analyzer</title>
+    
+    <!-- Chart.js for Radar Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-section label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .analyze-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .analyze-btn:active {
+            transform: translateY(0);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .category-result {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .category-result h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+        
+        .confidence {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .ethics-section {
+            margin-top: 30px;
+        }
+        
+        .ethics-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin: 30px auto;
+            max-width: 700px;
+        }
+        
+        .ethics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .ethics-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ddd;
+            transition: transform 0.2s;
+        }
+        
+        .ethics-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .ethics-item.detected {
+            border-left-color: #e74c3c;
+            background: #fee;
+        }
+        
+        .ethics-item.safe {
+            border-left-color: #27ae60;
+            background: #efe;
+        }
+        
+        .ethics-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .ethics-item-score {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #c00;
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 AI Ethics Radar</h1>
+            <p>Analyze news articles for AI ethics concerns</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <label for="articleText">Paste Article Text:</label>
+                <textarea 
+                    id="articleText" 
+                    placeholder="Enter or paste the article text here... (minimum 100 characters)"
+                ></textarea>
+            </div>
+            
+            <div class="button-container">
+                <button class="analyze-btn" onclick="analyzeArticle()">
+                    Analyze Article
+                </button>
+            </div>
+            
+            <div class="error" id="errorMsg"></div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing article...</p>
+            </div>
+            
+            <div class="results" id="results">
+                <div class="category-result">
+                    <h2>Article Category</h2>
+                    <div>
+                        <span class="category-badge" id="categoryName"></span>
+                        <span class="confidence" id="categoryConfidence"></span>
+                    </div>
+                </div>
+                
+                <div class="ethics-section" id="ethicsSection" style="display: none;">
+                    <h3>⚠️ AI Ethics Issues Detected</h3>
+                    
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    
+                    <div class="ethics-list" id="ethicsList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>AI Ethics Radar © 2024 | Built for NLP Capstone Project</p>
+        </footer>
+    </div>
+    
+    <script>
+        let radarChart = null;
+        
+        async function analyzeArticle() {
+            const text = document.getElementById('articleText').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const analyzeBtn = document.querySelector('.analyze-btn');
+            
+            // Reset
+            errorMsg.style.display = 'none';
+            results.style.display = 'none';
+            
+            // Validate
+            if (text.length < 10) {
+                errorMsg.textContent = 'Please enter at least 10 characters of article text.';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            // Show loading
+            loading.style.display = 'block';
+            analyzeBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                // Display results
+                displayResults(data);
+                
+            } catch (error) {
+                errorMsg.textContent = 'Error: ' + error.message;
+                errorMsg.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        }
+        
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            const categoryName = document.getElementById('categoryName');
+            const categoryConfidence = document.getElementById('categoryConfidence');
+            const ethicsSection = document.getElementById('ethicsSection');
+            
+            // Show category
+            categoryName.textContent = data.category;
+            categoryConfidence.textContent = `Confidence: ${(data.confidence * 100).toFixed(1)}%`;
+            
+            // Show/hide ethics section
+            if (data.ethics) {
+                ethicsSection.style.display = 'block';
+                displayEthicsResults(data.ethics);
+            } else {
+                ethicsSection.style.display = 'none';
+            }
+            
+            results.style.display = 'block';
+        }
+        
+        function displayEthicsResults(ethics) {
+            const ethicsList = document.getElementById('ethicsList');
+            
+            // Prepare data for radar chart
+            const labels = [];
+            const values = [];
+            const listItems = [];
+            
+            // Sort by probability (descending)
+            const sortedEthics = Object.entries(ethics)
+                .sort((a, b) => b[1] - a[1]);
+            
+            sortedEthics.forEach(([label, score]) => {
+                labels.push(label);
+                values.push(score * 100);
+                
+                // Create list item
+                const isDetected = score >= 0.5;
+                const itemClass = isDetected ? 'detected' : 'safe';
+                const fillColor = isDetected ? '#e74c3c' : '#27ae60';
+                
+                listItems.push(`
+                    <div class="ethics-item ${itemClass}">
+                        <div class="ethics-item-name">${label}</div>
+                        <div class="ethics-item-score">${(score * 100).toFixed(1)}%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${score * 100}%; background: ${fillColor}"></div>
+                        </div>
+                    </div>
+                `);
+            });
+            
+            ethicsList.innerHTML = listItems.join('');
+            
+            // Create radar chart
+            createRadarChart(labels, values);
+        }
+        
+        function createRadarChart(labels, values) {
+            const ctx = document.getElementById('radarChart');
+            
+            // Destroy existing chart
+            if (radarChart) {
+                radarChart.destroy();
+            }
+            
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ethics Issue Probability (%)',
+                        data: values,
+                        fill: true,
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        borderColor: 'rgb(231, 76, 60)',
+                        pointBackgroundColor: 'rgb(231, 76, 60)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(231, 76, 60)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 11,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.r.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Allow Enter key to submit (with Shift+Enter for newline)
+        document.getElementById('articleText').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                analyzeArticle();
+            }
+        });
+    </script>
+</body>
+</html>
