@@ -30,6 +30,21 @@
 
 ## 🎯 Overview
 
+<table style="width: 100%;">
+  <tr>
+    <td style="width: 50%; text-align: center;">
+      <img src="visualization/ai.png" alt="Image 1" width="100%">
+    </td>
+    <td style="width: 50%; text-align: center;">
+      <img src="visualization/radar.png" alt="Image 2" width="100%">
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="visualization/sport.png" alt="Image 3" width="70%">
+</p>
+
 **AI Ethics Radar** is an end-to-end NLP system that analyzes news articles to:
 1. **Classify main categories** (AI, Technology, Business, Politics, Sports, Others)
 2. **Detect AI ethics issues** across 12 dimensions when AI content is identified
@@ -374,12 +389,10 @@ CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
 ## 👥 Contributors
 
 **Sourav Das**
-- NLP Capstone Project
-- MasterCourse AI/ML Program
+- NLP Project
 - December 2024
 
 ### Acknowledgments
-- MasterCourse Team for project guidance
 - HuggingFace for transformer models
 - Tech news outlets for article sources
 
@@ -406,9 +419,6 @@ If you use this project in your research or work, please cite:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ### Development Setup
 ```bash
@@ -426,28 +436,3 @@ git push origin feature/amazing-feature
 ```
 
 ---
-
-## 📧 Contact
-
-**Sourav Das**
-- Email: your.email@example.com
-- LinkedIn: [your-profile](https://linkedin.com/in/yourprofile)
-- GitHub: [@yourusername](https://github.com/yourusername)
-
----
-
-## ⭐ Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/ai-ethics-radar&type=Date)](https://star-history.com/#yourusername/ai-ethics-radar&Date)
-
----
-
-<div align="center">
-
-**Built with ❤️ for a more ethical AI future**
-
-[Report Bug](https://github.com/yourusername/ai-ethics-radar/issues) · [Request Feature](https://github.com/yourusername/ai-ethics-radar/issues) · [Documentation](https://github.com/yourusername/ai-ethics-radar/wiki)
-
-</div>
